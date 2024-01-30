@@ -1,0 +1,80 @@
+/auth/signin:
+  post:
+    description: Crea un Utente
+    response:
+      201: 
+        description: Ritorna l'id dell'utente
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                utente: 
+                 type: Utente
+/auth/login:
+  post:
+    description: Permette di effettuare il login
+    response:
+      200: 
+        description: Ritorna l'id dell'utente
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+               token: 
+                 type: jwt
+
+                 type: String
+/auth/changepass:
+  put:
+    description: Permette di cambiare la password
+    response:
+      200: 
+        description: Ritorna un messaggio di conferma cambio password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+               message: 
+                 type: String
+
+/auth/retrievepass:
+  put:
+      description: Permette di recuperare la password
+      response: 
+      200:
+        description: Ritorna un messaggio di conferma cambio password
+        content:
+          application/json:
+            schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: String
+
+/prenotazioni:
+  post:
+    description: Permette di prenotare una struttura
+    response:
+      201: 
+        description: Ritorna un messaggio di conferma prenotazione
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                message: 
+                  type: String
+
