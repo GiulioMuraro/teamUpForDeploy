@@ -4,6 +4,7 @@ const mongoose=require ('mongoose');
 const schemaCampo = new mongoose.Schema({
     nome:{
         type: String,
+        unique,
         required: true
     },
     posizione:{
@@ -16,15 +17,15 @@ const schemaCampo = new mongoose.Schema({
     },
     prenotazioni:{
         type: [mongoose.Types.ObjectId],
-        ref: 'prenotazione'
+        ref: 'prenotazioni'
     },
     gestore:{
         type: mongoose.Types.ObjectId,
         ref: 'utente'
     },
-    report :{
+    reports :{
         type: [mongoose.Types.ObjectId],
-        ref: 'report'
+        ref: 'reports'
     }
 })
 module.exports=mongoose.model('campo',schemaCampo);

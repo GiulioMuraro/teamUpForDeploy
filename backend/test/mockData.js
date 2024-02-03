@@ -36,13 +36,23 @@ casual.define('prenotazione',()=>{
         campo: casual.campo
     }
 })
+
+casual.define('segnalazione', () => {
+    return {
+        description: casual.description,
+        utente: casual.utente,
+        prenotazione: casual.prenotazione,
+        campo: casual.campo
+    }
+})
+
  /**
      * @param nome
      * @param email
      * @param password
      */
 const state = {
-    users: casual.utente,
+    user: casual.utente,
     campo: casual.campo,
     gestore: casual.gestore,
     prenotazione: casual.prenotazione

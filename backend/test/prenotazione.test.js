@@ -5,9 +5,9 @@ const mockData = require('./mockData');
 describe('Test prenotazioni', () => {
   test('POST prenotazione campo inesistente', async () => {
     const registra = await request(app).post('/auth/signin').set('Content-Type', 'application/json').send({
-      nomeUtente: mockData.state.users.nome,
-      email: mockData.state.users.email,
-      password: mockData.state.users.password,
+      nomeUtente: mockData.state.user.nome,
+      email: mockData.state.user.email,
+      password: mockData.state.user.password,
     });
     const registrazioneAdmin = await request(app).post('/auth/signin').set('Content-Type', 'application/json').send({
       nomeUtente: mockData.state.gestore.nome,
@@ -24,7 +24,7 @@ describe('Test prenotazioni', () => {
       nome: "campo fasullo",
       data: mockData.state.prenotazione.data,
       orario: mockData.state.prenotazione.orario,
-      utente: mockData.state.users
+      utente: mockData.state.user
     });
     expect(res.status).toBe(404);
     expect(res.body).toEqual({ success: false, message: "Impossibile trovare il campo inserito. Ricontrollare" });
@@ -53,14 +53,14 @@ describe('Test prenotazioni', () => {
       nome: mockData.state.campo.nome,
       data: mockData.state.prenotazione.data,
       orario: mockData.state.prenotazione.orario,
-      utente: mockData.state.users
+      utente: mockData.state.user
     });
     expect(res.status).toBe(200);
   });
 
   test('POST orari prenotazioni utente ok', async () => {
     const res = await request(app).post('/prenotazioni/getprenotazioni').set('Content-Type', 'application/json').send({
-      utente: mockData.state.users
+      utente: mockData.state.user
     });
     expect(res.status).toBe(200);
   });

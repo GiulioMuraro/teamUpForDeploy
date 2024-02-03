@@ -10,25 +10,25 @@ exports.creaPrenotazione = async (req, res) => {
       return;
     }
 
-    const findCampo = await Campo.findOne({ nome: nome });
-    if (!findCampo) {
-      res.status(404).json({ success: false, message: "Impossibile trovare il campo inserito. Ricontrollare" });
-      return;
-    }
-
-    const nuovaPrenotazione = new Prenotazione({
-      campo: findCampo,
-      data: data,
-      orario: orario
-    });
-
     const findUtente = await Utente.findOne({ email: utente.email });
     if (!findUtente) {
       res.status(404).json({ success: false, message: "Impossibile creare la prenotazione: Utente non trovato" });
       return;
     }
 
-    nuovaPrenotazione.utente = findUtente;
+    const findCampo = await Campo.findOne({ nome: nome });
+    if (!findCampo) {
+      res.status(404).json({ success: false, message: "Impossibile creare la prenotazione: Campo non trovato" });
+      return;
+    }
+
+    const nuovaPrenotazione = new Prenotazione({
+      campo: findCampo,
+      data: data,
+      orario: orario,
+      utente: findUtente
+    });
+
     findCampo.prenotazioni.push(nuovaPrenotazione);
     findUtente.prenotazioni.push(nuovaPrenotazione);
 

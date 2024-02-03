@@ -41,7 +41,7 @@ exports.getOrariPrenotazione = async (req, res) => {
   const { nome, data } = req.body;
 
   try {
-    const findCampo = await Campo.findOne({ nome })
+    const findCampo = await Campo.findOne({ nome: nome })
       .populate({
         path: 'prenotazioni',
         match: { data },

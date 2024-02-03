@@ -3,8 +3,8 @@ const prenotazioniRouter = express.Router();
 
 const controllerPrenotazioni = require('../controllers/controllerPrenotazioni');
 
-// middleware > 
-prenotazioniRouter.post('/', controllerPrenotazioni.creaPrenotazione);
-prenotazioniRouter.post('/getprenotazioni', controllerPrenotazioni.fetchPrenotazione)
 
-module.exports = prenotazioniRouter
+prenotazioniRouter.post('/', controllerPrenotazioni.creaPrenotazione);
+prenotazioniRouter.get('/', controllerPrenotazioni.fetchPrenotazione)
+
+module.exports = prenotazioniRouter 

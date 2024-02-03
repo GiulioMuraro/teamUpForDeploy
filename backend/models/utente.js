@@ -24,11 +24,15 @@ const schemaUtente = new mongoose.Schema({
     },
     prenotazioni:{
         type: [mongoose.Types.ObjectId],
-        ref: 'prenotazione'
+        ref: 'prenotazioni'
     },
     campi:{//nel caso di un admin vengono salvati nel documento anche la lista di campi
         type:[mongoose.Types.ObjectId],
         ref:'campo'
+    },
+    reports:{
+        type: [mongoose.Types.ObjectId],
+        ref: 'reports'
     },
     tokenRecuperoPassword: String,
     scadenzaRecuperoPassword: String
@@ -39,7 +43,7 @@ schemaUtente.pre('save', async function (next){
         next()
     
     this.password=await bcrypt.hash(this.password,10)
-    console.log(this.password)
+    //console.log(this.password) 
         next()
 })
 

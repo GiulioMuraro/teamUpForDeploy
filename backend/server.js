@@ -10,6 +10,7 @@ const db = require('./models');
 const authRoute = require('./routes/autenticazione');
 const prenotazioniRouter = require('./routes/prenotazioni');
 const campiRouter = require('./routes/campi');
+const segnalazioniRouter = require('./routes/reports');
 
 const app = express();
 
@@ -19,12 +20,13 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Use Controllers
 app.use("/auth", authRoute);
 app.use("/campi", campiRouter);
 app.use("/prenotazioni", prenotazioniRouter);
+app.use("/segnalazioni", segnalazioniRouter);
 
 // Gestisci le pagine che non esistono
 app.use('/*', (req, res) => {
