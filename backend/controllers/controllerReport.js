@@ -7,40 +7,40 @@ exports.CreaSegnalazione = async (req, res) => {
     const { description, utente, prenotazione, campo } = req.body;
     try {
         if (!description || !utente || !prenotazione || !campo) {
-        res.status(400).json({ success: false, message: "Compilare tutti i campi" });
-        return;
+            res.status(400).json({ success: false, message: "Compilare tutti i campi" });
+            return;
         }
 
         // Check if the user is existing in the DB
         const findUtente = await Utente.findOne({ email: utente.email });
         if (!findUtente) {
-        res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Utente non trovato" });
-        return;
+            res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Utente non trovato" });
+            return;
         }
 
         // Check if the field is existing in the DB
-        const findCampo = await Campo.findOne({ nome: nome });
+        const findCampo = await Campo.findOne({ nome: campo.nome });
         if (!findCampo) {
-        res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Campo non trovato" });
-        return;
+            res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Campo non trovato" });
+            return;
         }
 
         //Check if the booking is existing in the DB
-        const findBooking = await Prenotazione.findOne({ campo: campo.nome, data: prenotazione.data, orario: prenotazione.orario , utente: utente});
+        const findBooking = await Prenotazione.findOne({ campo: findCampo, data: prenotazione.data, orario: prenotazione.orario , utente: findUtente });
         if (!findBooking) {
-        res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Prenotazione non trovata" });
-        return;
+            res.status(404).json({ success: false, message: "Impossibile creare la segnalazione: Prenotazione non trovata" });
+            return;
         }
 
         const nuovaSegnalazione = new Segnalazione({
             description: description,
-            utente: utente,
-            prenotazione: prenotazione,
+            utente: findUtente,
+            prenotazione: findBooking,
             campo: findCampo
         });
 
-        findUtente = reports.push(nuovaSegnalazione);
-        findCampo = reports.push(nuovaSegnalazione);
+        findUtente.reports.push(nuovaSegnalazione);
+        findCampo.reports.push(nuovaSegnalazione);
 
         await findUtente.save();
         await findCampo.save();
@@ -69,7 +69,7 @@ exports.fetchSegnalazione = async (req, res) => {
             res.status(404).json({ success: false, message: "Utente non riconosciuto" });
         }
         else {
-            const findSegnalazione = findUtente.segnalazioni.map((segnalazione) => ({
+            const findSegnalazione = findUtente.reports.map((segnalazione) => ({
                 utente: segnalazione.utente.username,
                 campo: segnalazione.campo.nome,
                 data: segnalazione.prenotazione.data,

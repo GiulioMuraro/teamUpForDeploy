@@ -1,61 +1,92 @@
-const app = require('../server');
+const { app, startServer, closeServer } = require('../server');
 const request = require('supertest')
 const mongoose = require('mongoose')
 const casual = require('casual')
-const mockData = require('./mockData')
+const mockDataModule = require('./mockData')
+const Utente = require('../models/utente');
 
+beforeAll(async () => {
+    // Ensure that the server is started before running the tests
+    await startServer();
+});
+  
+afterAll(async () => {
+    // Delete documents created by the test
+    await Utente.deleteMany({});
+
+    // Ensure that the server is closed after running all tests
+    await closeServer();
+});
+  
 
 describe ('Test auth', ()=>{   
     test('POST /signup ok', async()=>{
+        mockData = mockDataModule.generateState();
         const res= await request(app).post('/auth/signin').set('Content-Type','application/json').send({
-            nomeUtente: mockData.state.users.nome,
-            email: mockData.state.users.email,
-            password: mockData.state.users.password
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password
         })
         expect(res.status).toBe(200)
     });
 
     test('POST /signup no password', async ()=>{
+        mockData = mockDataModule.generateState();
         const res= await request(app).post('/auth/signin').set('Content-Type','application/json').send({
-            nomeUtente:mockData.state.users.nome,
-            email:mockData.state.users.email
+            nomeUtente:mockData.user.nome,
+            email:mockData.user.email
         })
         expect(res.status).toBe(400)
         expect(res.body).toEqual({ success:false ,message:"Compilare tutti i campi!"})
     });
 
     test('POST /signup no email', async ()=>{
-        const res= await request(app).post('/auth/signin').set('Content-Type','application/json').send({
-            nomeUtente:mockData.state.users.nome,
-            password:mockData.state.users.password
+        mockData = mockDataModule.generateState();
+        const res = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente:mockData.user.nome,
+            password:mockData.user.password
         })
         expect(res.status).toBe(400)
         expect(res.body).toEqual({ success:false ,message:"Compilare tutti i campi!"})
     });
 
     test('POST /signup no nome', async ()=>{
+        mockData = mockDataModule.generateState();
         const res= await request(app).post('/auth/signin').set('Content-Type','application/json').send({
-            password:mockData.state.users.password,
-            email:mockData.state.users.email
+            password:mockData.user.password,
+            email:mockData.user.email
         })
         expect(res.status).toBe(400)
         expect(res.body).toEqual({ success:false ,message:"Compilare tutti i campi!"})
     })
 
     test('Post /signup utente registrato', async ()=>{
+        mockData = mockDataModule.generateState();
+
+        // Find random user to try to sign up again with it
+        const randomUtente = await Utente.findOne();
+
         const res=await request(app).post('/auth/signin').set('Content-Type','application/json').send({
-            nomeUtente: mockData.state.users.nome,
-            email: mockData.state.users.email,
-            password: mockData.state.users.password
+            nomeUtente: randomUtente.nome,
+            email: randomUtente.email,
+            password: randomUtente.password
         })
         expect(res.status).toBe(409);
         expect(res.body).toEqual({success:false, message: "Utente già registrato"})
     })
 
     test(('POST /login ok'), async () => {
+        mockData = mockDataModule.generateState();
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password
+        })
+        expect(registra.status).toBe(200);
+
         const res = await request(app).post('/auth/login').send({
-            email: mockData.state.users.email,
-            password: mockData.state.users.password
+            email: mockData.user.email,
+            password: mockData.user.password
         })
         expect(res.status).toBe(200)
     });
@@ -63,7 +94,7 @@ describe ('Test auth', ()=>{
     test(('POST /login email sbagliata'), async () => {
         const res = await request(app).post('/auth/login').send({
             email: "pappo@gmail.com",
-            password: mockData.state.users.password
+            password: mockData.user.password
         })
         expect(res.status).toBe(404)
         expect(res.body).toEqual({ message: "Utente inesistente", success: false })
@@ -71,7 +102,7 @@ describe ('Test auth', ()=>{
 
     test(('POST /login password sbagliata'), async () => {
         const res = await request(app).post('/auth/login').send({
-            email: mockData.state.users.email,
+            email: mockData.user.email,
             password: "13"
         })
 
@@ -81,7 +112,7 @@ describe ('Test auth', ()=>{
 
     test(('POST /login email mancante'), async () => {
         const res = await request(app).post('/auth/login').send({
-            password: mockData.state.users.password
+            password: mockData.user.password
         })
 
         expect(res.status).toBe(400)
@@ -90,7 +121,7 @@ describe ('Test auth', ()=>{
 
     test(('POST /login password mancante'), async () => {
         const res = await request(app).post('/auth/login').send({
-            email: mockData.state.users.email
+            email: mockData.user.email
         })
 
         expect(res.status).toBe(400)

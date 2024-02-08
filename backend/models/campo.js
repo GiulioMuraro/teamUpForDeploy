@@ -4,7 +4,7 @@ const mongoose=require ('mongoose');
 const schemaCampo = new mongoose.Schema({
     nome:{
         type: String,
-        unique,
+        unique: true,
         required: true
     },
     posizione:{
@@ -17,7 +17,7 @@ const schemaCampo = new mongoose.Schema({
     },
     prenotazioni:{
         type: [mongoose.Types.ObjectId],
-        ref: 'prenotazioni'
+        ref: 'prenotazione'
     },
     gestore:{
         type: mongoose.Types.ObjectId,

@@ -7,7 +7,7 @@ exports.inserisciCampo = async (req, res) => {
   const { nome, posizione, descrizione, gestore } = req.body;
 
   try {
-    const findCampo = await Campo.findOne({ nome });
+    const findCampo = await Campo.findOne({ nome: nome });
 
     if (!findCampo) {
       const findGest = await Utente.findOne({ email: gestore.email });
@@ -41,10 +41,9 @@ exports.getOrariPrenotazione = async (req, res) => {
   const { nome, data } = req.body;
 
   try {
-    const findCampo = await Campo.findOne({ nome: nome })
-      .populate({
+    const findCampo = await Campo.findOne({ nome: nome }).populate({
         path: 'prenotazioni',
-        match: { data },
+        match: { data: data },
         select: 'orario',
       });
 
@@ -54,7 +53,8 @@ exports.getOrariPrenotazione = async (req, res) => {
       res.status(200).json({ success: true, findCampo });
     }
   } catch (error) {
-    res.status(400).json({ success: false, message: "Errore durante il recupero degli orari delle prenotazioni" });
+    console.log(error);
+    res.status(400).json({ success: false, message: "Errore durante il recupero degli orari delle prenotazioni: "});
   }
 };
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config');
-const connectDB = require('./connectDB');
+const { connectDB, closeDB } = require('./connectDB');
 
 // connect to DB 
 const db = require('./models');
@@ -36,18 +36,50 @@ app.use('/*', (req, res) => {
 let server
 
 const startServer = async () => {
-  await connectDB();
+  try {
+    await connectDB();
 
-  const PORT = process.env.PORT;
+    const PORT = process.env.PORT;
+    console.log("Starting server...")
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+    return new Promise((resolve, reject) => {
+      server = app.listen(PORT, (error) => {
+        if (error) {
+          console.error('Error starting the server:', error);
+          reject(error);
+        } else {
+          console.log(`Server is running on port ${PORT}`);
+          resolve(server);
+        }
+      });
+    })
+  }catch (error) {
+    console.error('Error starting server: ', error);
+    throw error;
+  }
+}
+
+const closeServer = async () => {
+  // Close the Express app server
+  try{ 
+    console.log("Trying to stop the server...");
+    if(server){
+      await new Promise((resolve) => server.close(resolve));
+      console.log("Server stopped!")
+    }
+
+    await closeDB();
+  }catch(error){
+    console.log("Error stopping the server: " + error);
+    throw error;
+  }
 };
 
-startServer().catch((error) => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-});
+// Only start the server if this script is executed directly
+if (require.main === module) {
+  startServer().catch(error => {
+    process.exit(1); // Exit with a non-zero exit code to indicate failure
+  });
+}
 
-module.exports= app;
+module.exports = { app, startServer, closeServer };

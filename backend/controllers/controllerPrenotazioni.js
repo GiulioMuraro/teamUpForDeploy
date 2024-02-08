@@ -6,6 +6,7 @@ exports.creaPrenotazione = async (req, res) => {
   const { nome, data, utente, orario } = req.body;
   try {
     if (!nome || !data || !utente || !orario) {
+      console.log(nome + ";" + data + ";" + utente + ";" + orario);
       res.status(400).json({ success: false, message: "Compilare tutti i campi" });
       return;
     }

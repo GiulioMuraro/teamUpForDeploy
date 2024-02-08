@@ -1,4 +1,12 @@
-const casual = require('casual')
+const casual = require('casual');
+const prenotazione = require('../models/prenotazione');
+const moment = require('moment');
+
+// Generate a random seed value
+const randomSeed = Math.floor(Math.random() * 1000000); // Adjust range as needed
+
+// Set the random seed value for casual
+casual.seed(randomSeed);
 
 const VAL_TEST = 5
 
@@ -29,7 +37,7 @@ casual.define('campo', () => {
 })
 casual.define('prenotazione',()=>{
     return{
-        data:casual.date((format='YYYY-MM-DD')),
+        data: casual.date((format='YYYY-MM-DD')),
         utente: casual.utente,
         durata: casual.integer(from=1, to=2),
         orario: casual.integer(from=0,to=23),
@@ -46,16 +54,46 @@ casual.define('segnalazione', () => {
     }
 })
 
- /**
-     * @param nome
-     * @param email
-     * @param password
-     */
-const state = {
-    user: casual.utente,
-    campo: casual.campo,
-    gestore: casual.gestore,
-    prenotazione: casual.prenotazione
+state = {
+    user: {},
+    gestore: {},
+    campo: {},
+    prenotazione: {},
+    segnalazione: {}
+}
+
+// Function to redefine the state variable
+const generateState = () => {
+    const user = casual.utente;
+    const gestore = casual.gestore;
+    const campo = {
+        nome: casual.name,
+        descrizione: casual.description,
+        posizione: casual.string,
+        prenotazioni: [],
+        gestore: gestore
+    };
+    const prenotazione = {
+        data: casual.date('YYYY-MM-DD'),
+        utente: user,
+        durata: casual.integer(from = 1, to = 2 ).toString(),
+        orario: casual.integer(from = 0, to = 23).toString(),
+        campo: campo
+    };
+    const segnalazione = {
+        description: casual.description,
+        utente: user,
+        prenotazione: prenotazione,
+        campo: campo
+    };
+
+    return {
+        user: user,
+        gestore: gestore,
+        campo: campo,
+        prenotazione: prenotazione,
+        segnalazione: segnalazione
+    };
 }
 
 /**
@@ -71,7 +109,7 @@ const main = () => {
 
 module.exports= {
     main,
-    users,
     VAL_TEST,
-    state
+    state,
+    generateState
 }

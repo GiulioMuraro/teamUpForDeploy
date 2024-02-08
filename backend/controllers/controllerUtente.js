@@ -17,8 +17,6 @@ exports.registrazioneUtente = async (req, res) => {
       return res.status(409).json({ success: false, message: "Utente già registrato" });
     }
 
-    console.log("Password da salvare: " + password)
-
     const newUtente = new Utente({
       nome: nomeUtente,
       email: email,
