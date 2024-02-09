@@ -9,52 +9,58 @@ import NotFoundView from '../views/NotFoundView'
 import ConfermaView from '../views/ConfermaView'
 import DashBoardView from '../views/DashBoardView'
 import preView from '../views/preView'
+import reportView from '../views/ReportView';
 
 const routes = [
   {
     path: '/',
-    name: 'HomePage',
+    name: 'HomePageView',
     component: HomeView
   },
   {
-    path: '/dashboard',
+    path: '/dashboardView',
     name: 'DashBoard',
     component: DashBoardView
   },
   {
-    path: '/prenotazione',
-    name: 'Prenotazione',
+    path: '/bookingView',
+    name: 'Booking',
     component: BookingView,     
   },
   {
-    path: '/conferma',
+    path: '/confermaView',
     name: 'Conferma',
     component: ConfermaView,     
   },
   {
-    path: '/signup',
+    path: '/signUpView',
     name: 'SignUp',
     component: SignUpView
   },
   {
-    path: '/login',
+    path: '/loginView',
     name: 'Login',
     component: LoginView
   },
   {
-    path: '/AdminAccountView',
+    path: '/adminAccountView',
     name: 'AdminAccount',
     component: AdminAccountView
   },
   {
-    path: '/ProfileView',
+    path: '/profileView',
     name: 'Profile',
     component: ProfileView
   },
   {
-    path: '/preffettuate',
+    path: '/preffettuateView',
     name: 'PrEff',
     component: preView
+  },
+  {
+    path: '/reportView',
+    name: 'Report',
+    component: reportView
   },
   // TO BE LAST
   { 

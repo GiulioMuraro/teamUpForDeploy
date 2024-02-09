@@ -38,6 +38,10 @@ const store = createStore({
         commit('setToken', { user, email, token });
       }
     },
+    // Logout action to clear token and user information
+    logout({ commit }) {
+      commit('clearToken');
+    },
   },
   getters: {
     getToken: state => {

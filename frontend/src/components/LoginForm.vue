@@ -28,7 +28,7 @@
             </div>
           </form>
           <hr class="my-6 border-white w-full" />
-          <router-link to="SignUp">
+          <router-link to="signUpView">
           <p class="mt-8 text-center">
             Non hai ancora un account? <a class="text-gray-700 hover:text-white font-semibold">Registrati</a>
           </p>

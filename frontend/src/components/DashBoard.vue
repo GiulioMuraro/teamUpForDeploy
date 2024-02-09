@@ -5,13 +5,13 @@
         <h2 class="text-2xl font-bold text-center text-white" style="text-transform: capitalize;">Ciao {{ this.datiUtente.nome }}!</h2>
         
         <div class="mt-6 bg-white rounded-lg p-4 ">
-          <router-link to="Prenotazione">
+          <router-link to="BookingView">
             <button class="w-full my-4 px-4 py-2 text-lg font-bold bg-green-500 text-white hover:text-green-500 hover:bg-white rounded-lg shadow-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
               Prenota un campo!
             </button>
           </router-link>
 
-          <router-link to="preffettuate">
+          <router-link to="preffettuateView">
             <button class="w-full my-4 px-4 py-2 text-lg font-bold bg-green-500 text-white hover:text-green-500 hover:bg-white rounded-lg shadow-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
               Prenotazioni
             </button>

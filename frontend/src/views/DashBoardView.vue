@@ -20,8 +20,7 @@
     },
     mounted(){
       if(!store.state.token){        
-      router.replace({name: "Login"})      
-      //console.log("utente non autenticato")
+        router.replace({ path: "/" })      
       }
     },
   }
