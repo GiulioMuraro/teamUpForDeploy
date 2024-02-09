@@ -53,13 +53,13 @@ exports.fetchPrenotazione = async (req, res) => {
     if (!findUtente) {
       res.status(404).json({ success: false, message: "Utente non riconosciuto" });
     } else {
-      const findPrenotazione = findUtente.prenotazioni.map((prenotazione) => ({
+      const findPrenotazioni = findUtente.prenotazioni.map((prenotazione) => ({
         campo: prenotazione.campo.nome,
         data: prenotazione.data,
         orario: prenotazione.orario,
       }));
 
-      res.status(200).json({ success: true, findPrenotazione });
+      res.status(200).json({ success: true, findPrenotazioni });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: "Errore durante il recupero delle prenotazioni" });

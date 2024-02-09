@@ -43,13 +43,11 @@ schemaUtente.pre('save', async function (next){
         next()
     
     this.password=await bcrypt.hash(this.password,10)
-    //console.log(this.password) 
         next()
 })
 
 schemaUtente.methods.checkPassword= async function( password){
     let val=await bcrypt.compare(password, this.password)
-    console.log(val);
     return val; 
 }
 
