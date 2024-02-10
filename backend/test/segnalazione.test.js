@@ -284,4 +284,91 @@ describe('Test segnalazioni', () => {
     expect(res.body).toEqual({ success: true, message: "Nuova segnalazione creata" });
   });
 
+  test('POST fetch segnalazione ok', async () => {
+    mockData = mockDataModule.generateState();
+    const registra = await request(app).post('/auth/signin').set('Content-Type', 'application/json').send({
+      nomeUtente: mockData.user.nome,
+      email: mockData.user.email,
+      password: mockData.user.password,
+      gestore: 0
+    });
+    expect(registra.status).toBe(200);
+
+    const registrazioneAdmin = await request(app).post('/auth/signin').set('Content-Type', 'application/json').send({
+      nomeUtente: mockData.gestore.nome,
+      password: mockData.gestore.password,
+      email: mockData.gestore.email,
+      gestore: 1
+    });
+    expect(registrazioneAdmin.status).toBe(200);
+
+    // Retrieve the ObjectId of the admin
+    const findGestore = await Utente.findOne({ email: mockData.gestore.email });
+    if (!findGestore) {
+        return;
+    }
+
+    const campo = await request(app).post('/campi/addcampo').set('Content-Type', 'application/json').send({
+      nome: mockData.campo.nome,
+      descrizione: mockData.campo.descrizione,
+      posizione: mockData.campo.posizione,
+      gestore: findGestore
+    });
+    expect(campo.status).toBe(200);
+
+    //Retrieve the ObjectId of the field
+    const findCampo = await Campo.findOne({ nome: mockData.campo.nome });
+    if (!findCampo) {
+        return;
+    }
+    //Retrieve the ObjectId of the user
+    const findUtente = await Utente.findOne({ email: mockData.user.email });
+    if (!findUtente) {
+        return;
+    }
+
+    const prenotazione = await request(app).post('/prenotazioni').set('Content-Type', 'application/json').send({
+      nome: findCampo.nome,
+      data: mockData.prenotazione.data,
+      utente: findUtente,
+      orario: mockData.prenotazione.orario,
+      // the report value is undefined 
+    });
+    expect(prenotazione.status).toBe(200);
+
+    //Retrieve the ObjectId of the booking
+    const findPrenotazione = await Prenotazione.findOne({ campo: findCampo, data: mockData.prenotazione.data, orario: mockData.prenotazione.orario, utente: findUtente });
+    if(!findPrenotazione){
+      return;
+    }
+
+    const segnalazione = await request(app).post('/segnalazioni').set('Content-Type', 'application/json').send({
+      description: mockData.segnalazione.description,
+      utente: findUtente,
+      prenotazione: findPrenotazione,
+      campo: findCampo
+    });
+    expect(segnalazione.status).toBe(200);
+    expect(segnalazione.body).toEqual({ success: true, message: "Nuova segnalazione creata" });
+
+    const res = await request(app).post('/segnalazioni/getsegnalazioni').set('Content-Type', 'application/json').send({
+      utente: findUtente
+    });
+    expect(res.status).toBe(200);
+    expect(res.body.success).toEqual(true);
+  });
+
+  test('POST fetch segnalazione utente non registrato', async () => {
+    mockData = mockDataModule.generateState();
+
+    const res = await request(app).post('/segnalazioni/getsegnalazioni').set('Content-Type', 'application/json').send({
+      description: mockData.segnalazione.description,
+      utente: { email: "email fasulla"},
+      prenotazione: { nome: mockData.campo.nome, data: mockData.prenotazione.data, orario: mockData.prenotazione.orario },
+      campo: {}
+    });
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({ success: false, message: "Utente non riconosciuto" });
+  });
+
 });

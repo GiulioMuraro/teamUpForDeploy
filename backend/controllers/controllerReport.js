@@ -69,7 +69,7 @@ exports.fetchSegnalazione = async (req, res) => {
             res.status(404).json({ success: false, message: "Utente non riconosciuto" });
         }
         else {
-            const findSegnalazione = findUtente.reports.map((segnalazione) => ({
+            const findSegnalazioni = findUtente.reports.map((segnalazione) => ({
                 utente: segnalazione.utente.username,
                 campo: segnalazione.campo.nome,
                 data: segnalazione.prenotazione.data,
@@ -77,7 +77,7 @@ exports.fetchSegnalazione = async (req, res) => {
                 descrizione: segnalazione.description,
             }));
     
-            res.status(200).json({ success: true, findSegnalazione });
+            res.status(200).json({ success: true, findSegnalazioni });
         }
     } catch (error) {
       res.status(500).json({ success: false, message: "Errore durante il recupero delle segnalazioni" });

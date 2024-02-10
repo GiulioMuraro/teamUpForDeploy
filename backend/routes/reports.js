@@ -4,6 +4,6 @@ const segnalazioniRouter = express.Router();
 const controllerSegnalazioni = require('../controllers/controllerReport');
 
 segnalazioniRouter.post('/', controllerSegnalazioni.CreaSegnalazione);
-segnalazioniRouter.get('/', controllerSegnalazioni.fetchSegnalazione);
+segnalazioniRouter.post('/getsegnalazioni', controllerSegnalazioni.fetchSegnalazione);
 
 module.exports = segnalazioniRouter

@@ -57,12 +57,12 @@ exports.fetchPrenotazione = async (req, res) => {
     } else {
       const findPrenotazioni = findUtente.prenotazioni.map((prenotazione) => ({
         campo: {
-          nome: prenotazione.campo.nome, // Field from the related "campo" document
-          posizione: prenotazione.campo.posizione // Another field from the related "campo" document
+          nome: prenotazione.campo.nome,
+          posizione: prenotazione.campo.posizione
         },
-        data: prenotazione.data, // Field from the "prenotazione" document
-        orario: prenotazione.orario, // Field from the "prenotazione" document
-        utente: prenotazione.utente // Field from the "prenotazione" document
+        data: prenotazione.data,
+        orario: prenotazione.orario,
+        utente: prenotazione.utente
       
       }));
 

@@ -32,7 +32,7 @@ const schemaUtente = new mongoose.Schema({
     },
     reports:{
         type: [mongoose.Types.ObjectId],
-        ref: 'reports'
+        ref: 'report'
     },
     tokenRecuperoPassword: String,
     scadenzaRecuperoPassword: String
