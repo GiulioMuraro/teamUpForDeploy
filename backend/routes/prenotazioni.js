@@ -5,6 +5,6 @@ const controllerPrenotazioni = require('../controllers/controllerPrenotazioni');
 
 
 prenotazioniRouter.post('/', controllerPrenotazioni.creaPrenotazione);
-prenotazioniRouter.get('/', controllerPrenotazioni.fetchPrenotazione)
+prenotazioniRouter.post('/getprenotazioni', controllerPrenotazioni.fetchPrenotazione)
 
 module.exports = prenotazioniRouter 

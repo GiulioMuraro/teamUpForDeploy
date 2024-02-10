@@ -24,7 +24,7 @@ const schemaUtente = new mongoose.Schema({
     },
     prenotazioni:{
         type: [mongoose.Types.ObjectId],
-        ref: 'prenotazioni'
+        ref: 'prenotazione'
     },
     campi:{//nel caso di un admin vengono salvati nel documento anche la lista di campi
         type:[mongoose.Types.ObjectId],

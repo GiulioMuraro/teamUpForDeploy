@@ -6,7 +6,6 @@ exports.creaPrenotazione = async (req, res) => {
   const { nome, data, utente, orario } = req.body;
   try {
     if (!nome || !data || !utente || !orario) {
-      console.log(nome + ";" + data + ";" + utente + ";" + orario);
       res.status(400).json({ success: false, message: "Compilare tutti i campi" });
       return;
     }
@@ -48,20 +47,28 @@ exports.fetchPrenotazione = async (req, res) => {
   try {
     const findUtente = await Utente.findOne({ email: utente.email }).populate({
       path: "prenotazioni",
-      populate: { path: "campo", select: "nome" },
+      populate: [{ path: "campo" },
+        { path: "data" },
+        { path: "orario" },
+      ]
     });
     if (!findUtente) {
       res.status(404).json({ success: false, message: "Utente non riconosciuto" });
     } else {
       const findPrenotazioni = findUtente.prenotazioni.map((prenotazione) => ({
-        campo: prenotazione.campo.nome,
-        data: prenotazione.data,
-        orario: prenotazione.orario,
+        campo: {
+          nome: prenotazione.campo.nome, // Field from the related "campo" document
+          posizione: prenotazione.campo.posizione // Another field from the related "campo" document
+        },
+        data: prenotazione.data, // Field from the "prenotazione" document
+        orario: prenotazione.orario, // Field from the "prenotazione" document
+        utente: prenotazione.utente // Field from the "prenotazione" document
+      
       }));
 
       res.status(200).json({ success: true, findPrenotazioni });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: "Errore durante il recupero delle prenotazioni" });
+    res.status(500).json({ success: false, message: "Errore durante il recupero delle prenotazioni: " + error });
   }
 };
