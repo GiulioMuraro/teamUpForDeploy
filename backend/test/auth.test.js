@@ -92,6 +92,7 @@ describe ('Test auth', ()=>{
     });
 
     test(('POST /login email sbagliata'), async () => {
+        mockData = mockDataModule.generateState();
         const res = await request(app).post('/auth/login').send({
             email: "pappo@gmail.com",
             password: mockData.user.password
@@ -101,7 +102,16 @@ describe ('Test auth', ()=>{
     });
 
     test(('POST /login password sbagliata'), async () => {
-        const res = await request(app).post('/auth/login').send({
+        mockData = mockDataModule.generateState();
+
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password
+        })
+        expect(registra.status).toBe(200);
+
+        const res = await request(app).post('/auth/login').set('Content-Type','application/json').send({
             email: mockData.user.email,
             password: "13"
         })
@@ -111,7 +121,7 @@ describe ('Test auth', ()=>{
     });
 
     test(('POST /login email mancante'), async () => {
-        const res = await request(app).post('/auth/login').send({
+        const res = await request(app).post('/auth/login').set('Content-Type','application/json').send({
             password: mockData.user.password
         })
 
@@ -120,12 +130,48 @@ describe ('Test auth', ()=>{
     });
 
     test(('POST /login password mancante'), async () => {
-        const res = await request(app).post('/auth/login').send({
+        const res = await request(app).post('/auth/login').set('Content-Type','application/json').send({
             email: mockData.user.email
         })
 
         expect(res.status).toBe(400)
         expect(res.body).toEqual({ message: "Compilare tutti i campi", success: false })
+    });
+
+    test(('POST modifica informazioni utente non trovato'), async () => {
+        const res = await request(app).post('/auth/modifyinfo').set('Content-Type','application/json').send({
+            oldName: mockData.user.nome,
+            newName: "nome nuovo",
+            oldEmail: "email fasulla",
+            newEmail: "nuova.mail@gmail.com",
+            oldPassword: mockData.user.password,
+            newPassword: "passwordNuova1234"
+        })
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ success: false, message: "Utente non trovato" });        
+    });
+
+    test(('POST modifica informazioni ok'), async () => {
+        mockData = mockDataModule.generateState();
+
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password,
+            gestore: 0
+        })
+        console.log(registra.body);
+        expect(registra.status).toBe(200);
+
+        const res = await request(app).post('/auth/modifyinfo').set('Content-Type','application/json').send({
+            newName: "nome nuovo",
+            oldEmail: mockData.user.email,
+            newEmail: "nuova.mail@gmail.com",
+            oldPassword: mockData.user.password,
+            newPassword: "passwordNuova1234"
+        })
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({ success: true, message: "Campi dell'utente modificati correttamente" });
     });
 
 })

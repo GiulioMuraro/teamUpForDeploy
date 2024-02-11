@@ -39,11 +39,18 @@ const schemaUtente = new mongoose.Schema({
 })
 schemaUtente.pre('save', async function (next){
     
-    if(!this.isModified('password'))
-        next()
+    if (!this.isModified('password')) {
+        next(); // If password is not modified, move to the next middleware
+        return;
+    }
     
-    this.password=await bcrypt.hash(this.password,10)
-        next()
+    try {
+        // Hash the password
+        this.password = await bcrypt.hash(this.password, 10);
+        next(); // Call next to proceed to the next middleware
+    } catch (error) {
+        next(error); // Pass any error to the next middleware
+    }
 })
 
 schemaUtente.methods.checkPassword= async function( password){
