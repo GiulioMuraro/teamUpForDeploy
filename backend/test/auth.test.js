@@ -160,7 +160,6 @@ describe ('Test auth', ()=>{
             password: mockData.user.password,
             gestore: 0
         })
-        console.log(registra.body);
         expect(registra.status).toBe(200);
 
         const res = await request(app).post('/auth/modifyinfo').set('Content-Type','application/json').send({
@@ -172,6 +171,42 @@ describe ('Test auth', ()=>{
         })
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ success: true, message: "Campi dell'utente modificati correttamente" });
+    });
+
+    test(('POST get user info ok'), async () => {
+        mockData = mockDataModule.generateState();
+
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password,
+            gestore: 0
+        })
+        expect(registra.status).toBe(200);
+
+        const res = await request(app).post('/auth/getuserinfo').set('Content-Type','application/json').send({
+            email: mockData.user.email
+        })
+        expect(res.status).toBe(200);
+        expect(res.body.success).toEqual(true);
+    });
+
+    test(('POST get user info utente non trovato'), async () => {
+        mockData = mockDataModule.generateState();
+
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password,
+            gestore: 0
+        })
+        expect(registra.status).toBe(200);
+
+        const res = await request(app).post('/auth/getuserinfo').set('Content-Type','application/json').send({
+            email: "email fasulla"
+        })
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ success: false, message: "Utente non trovato" });
     });
 
 })

@@ -28,6 +28,17 @@ const store = createStore({
       // Rimuovi le informazioni di login da localStorage
       localStorage.removeItem('loginInfo');
     },
+    updateUser(state, payload) {
+      state.user = payload.user;
+      state.email = payload.email;
+
+      const loginInfo = JSON.parse(localStorage.getItem('loginInfo'));
+      if (loginInfo) {
+        loginInfo.user = payload.user;
+        loginInfo.email = payload.email;
+        localStorage.setItem('loginInfo', JSON.stringify(loginInfo));
+      }
+    },
   },
   actions: {
     // Azione per inizializzare lo store con le informazioni di login da localStorage
@@ -41,6 +52,9 @@ const store = createStore({
     // Logout action to clear token and user information
     logout({ commit }) {
       commit('clearToken');
+    },
+    updateUser({ commit }, payload) {
+      commit('updateUser', payload);
     },
   },
   getters: {

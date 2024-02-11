@@ -159,7 +159,6 @@ exports.modificaInfo = async (req, res) => {
     if(!findUtente){
       return res.status(404).json({ success: false, message: "Utente non trovato"});
     }
-    console.log(findUtente);
     
     // Update the Nome field in the user document
     if(newName){
@@ -176,6 +175,25 @@ exports.modificaInfo = async (req, res) => {
 
     await findUtente.save();
     res.status(200).json({ success: true, message: "Campi dell'utente modificati correttamente" });
+
+  }catch(error){
+    console.log("Errore nella modifica delle informazioni dell'utente: " + error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+
+};
+
+exports.getUserInfo = async (req, res) => {
+  const { email } = req.body;
+
+  try{
+    const findUtente = await Utente.findOne({ email: email });
+    if(!findUtente){
+      return res.status(404).json({ success: false, message: "Utente non trovato"});
+    }
+
+    // The resulting message object contains the name and the email of the user
+    res.status(200).json({ success: true, message: { nome: findUtente.nome, email: findUtente.email } });
 
   }catch(error){
     console.log("Errore nella modifica delle informazioni dell'utente: " + error);

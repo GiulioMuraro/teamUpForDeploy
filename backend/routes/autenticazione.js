@@ -8,4 +8,5 @@ authRouter.post('/login', controllerUtenti.loginUtente);
 authRouter.post('/signin', controllerUtenti.registrazioneUtente);
 authRouter.post('/changepass', controllerUtenti.cambioPassword);
 authRouter.post('/modifyinfo', controllerUtenti.modificaInfo);
+authRouter.post('/getuserinfo', controllerUtenti.getUserInfo);
 module.exports = authRouter;

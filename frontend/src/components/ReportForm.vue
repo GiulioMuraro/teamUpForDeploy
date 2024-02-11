@@ -56,7 +56,6 @@ export default defineComponent({
         async fetchPrenotazioni(){
             // Make HTTP request to fetch fields from the database
             try {
-                console.log("stampa: " + this.utente.email);
                 const res = await fetch(`${config.BASE_URL}/prenotazioni/getprenotazioni`, {
                     method: 'POST',
                     headers: {
