@@ -1,7 +1,7 @@
 <template>
     <div >
       <NavBar/>
-      <ProfileComponent/>
+      <ProfileComponent ref="profileComponent"/>
     </div>
   </template>
   
@@ -15,6 +15,11 @@
     components: {
       NavBar, 
       ProfileComponent,
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.$refs.profileComponent.retrieveOldInfo(); // Call retrieveOldInfo() when entering the route
+      });
     }
   }
   </script>

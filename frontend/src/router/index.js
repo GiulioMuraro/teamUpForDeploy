@@ -50,7 +50,7 @@ const routes = [
   {
     path: '/profileView',
     name: 'Profile',
-    component: ProfileView
+    component: ProfileView,
   },
   {
     path: '/preffettuateView',

@@ -34,6 +34,7 @@ const store = createStore({
 
       const loginInfo = JSON.parse(localStorage.getItem('loginInfo'));
       if (loginInfo) {
+        console.log(loginInfo);
         loginInfo.user = payload.user;
         loginInfo.email = payload.email;
         localStorage.setItem('loginInfo', JSON.stringify(loginInfo));

@@ -5,27 +5,27 @@
       <form @submit.prevent="submitForm" class="w-5/6">
         <div class="form-group flex flex-col">
           <label for="oldName" class="white-text text-left font-bold mt-1">Old name</label>
-          <input type="text" id="oldName" class="black-text w-full rounded-lg" required>
+          <input type="text" id="oldName" placeholder="Enter old username..." v-model="utente.oldName" class="black-text w-full rounded-lg" required>
         </div>
         <div class="form-group flex flex-col">
           <label for="newName" class="white-text text-left font-bold mt-2">New name</label>
-          <input type="text" id="newName" placeholder="Enter new username..." class="black-text w-full rounded-lg" required>
+          <input type="text" id="newName" placeholder="Enter new username..." class="black-text w-full rounded-lg">
         </div>
         <div class="form-group flex flex-col">
           <label for="oldEmail" class="white-text text-left font-bold mt-2">Old email</label>
-          <input type="email" id="oldEmail" class="black-text w-full rounded-lg" required>
+          <input type="email" id="oldEmail" placeholder="Enter old email..."  v-model="utente.oldEmail" class="black-text w-full rounded-lg" required>
         </div>
         <div class="form-group flex flex-col">
           <label for="newEmail" class="white-text text-left font-bold mt-2">New email</label>
-          <input type="email" id="newEmail" placeholder="Enter new email..." class="black-text w-full rounded-lg" required>
+          <input type="email" id="newEmail" placeholder="Enter new email..." class="black-text w-full rounded-lg">
         </div>
         <div class="form-group flex flex-col">
           <label for="oldPassword" class="white-text text-left font-bold mt-2">Old password</label>
-          <input type="password" id="oldPassword" placeholder="Enter old password to confirm the modification..." class="black-text w-full rounded-lg" required>
+          <input type="password" id="oldPassword" v-model="utente.oldPassword" placeholder="Enter old password to confirm the modification..." class="black-text w-full rounded-lg" required>
         </div>
         <div class="form-group flex flex-col">
           <label for="newPassword" class="white-text text-left font-bold mt-2">New password</label>
-          <input type="password" id="newPassword" placeholder="Enter new password..." class="black-text w-full rounded-lg" required>
+          <input type="password" id="newPassword" placeholder="Enter new password..." class="black-text w-full rounded-lg">
         </div>
         <button type="submit" class="white-text rounded-lg bg-green-800 w-2/5 mr-0 mt-3 mb-3">Save</button>
       </form>
@@ -49,7 +49,7 @@ export default defineComponent({
     return {
       utente: {
         oldName: "",
-        oldEmail: store.getters.getEmail,
+        oldEmail: "",
         oldPassword: ""
       }
     };
@@ -77,12 +77,14 @@ export default defineComponent({
         });
         const data = await res.json();
 
-        // Update the store with the new values
-        this.$store.dispatch('updateUser', { user: bodyRequest.newName, email: bodyRequest.newEmail });
-
-        // Notify the user if the result is 200 - OK
-        alert("Informazioni utente modificate correttamente");
-        router.push('/dashboardView');
+        if(res.status === 200){
+          // Update the store with the new values
+          store.dispatch('updateUser', { user: bodyRequest.newName || this.utente.oldName, email: bodyRequest.newEmail || this.utente.oldEmail });
+          
+          // Notify the user if the result is 200 - OK
+          alert(data.message);
+          router.push('/dashboardView');
+        }
 
         if(!data.success){
             console.log("Errore nella ricezione delle prenotazioni: " + res.error);
@@ -93,39 +95,28 @@ export default defineComponent({
     },
     async retrieveOldInfo(){
       // Make HTTP request to fetch fields from the database
-      alert(this.utente.oldEmail);
       try {
         const res = await fetch(`${config.BASE_URL}/auth/getuserinfo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: this.utente.oldEmail })
+            body: JSON.stringify({ email: store.getters.getEmail })
         });
         const data = await res.json();
         if(res.status === 200){
           const oldInfo = data.message;
 
-          //Populate the field of the old values
-          const inputOldName = document.getElementById('oldName');
-          const inputOldEmail = document.getElementById('oldEmail');
-
-          inputOldName.value = oldInfo.nome;
-          inputOldEmail.value = oldInfo.email;
+          this.utente.oldName = oldInfo.nome;
+          this.utente.oldEmail = oldInfo.email;
         }
         else{
-            console.log("Errore nella ricezione delle prenotazioni: " + res.error);
+            console.log("Errore nella ricezione delle info dello user: " + res.error);
         }
       } catch (error) {
           console.error("Errore nell'invio della richiesta di modifica dei dati utente: " + error);
       }
     }
-  },
-  beforeRouteEnter(to, from, next) {
-    console.log("beforeRouteEnter guard is called");
-    next(vm => {
-      vm.retrieveOldInfo(); // Call retrieveOldInfo() when entering the route
-    });
   },
 });
 
