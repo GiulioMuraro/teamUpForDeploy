@@ -209,4 +209,40 @@ describe ('Test auth', ()=>{
         expect(res.body).toEqual({ success: false, message: "Utente non trovato" });
     });
 
+    test(('POST modify user data a fake user'), async () => {
+        mockData = mockDataModule.generateState();
+
+        const res = await request(app).post('/auth/modifyinfo').set('Content-Type','application/json').send({
+            newName: mockData.user.nome,
+            oldEmail: "email fasulla",
+            newEmail: "",
+            oldPassword: mockData.user.password,
+            newPassword: ""
+        })
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ success: false, message: "Utente non trovato" });
+    });
+
+    test(('POST modify user data ok'), async () => {
+        mockData = mockDataModule.generateState();
+
+        const registra = await request(app).post('/auth/signin').set('Content-Type','application/json').send({
+            nomeUtente: mockData.user.nome,
+            email: mockData.user.email,
+            password: mockData.user.password,
+            gestore: 0
+        })
+        expect(registra.status).toBe(200);
+
+        const res = await request(app).post('/auth/modifyinfo').set('Content-Type','application/json').send({
+            newName: mockData.user.nome,
+            oldEmail: mockData.user.email,
+            newEmail: "nuovamail@gmail.com",
+            oldPassword: mockData.user.password,
+            newPassword: ""
+        })
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({ success: true, message: "Campi dell'utente modificati correttamente" });
+    });
+
 })
