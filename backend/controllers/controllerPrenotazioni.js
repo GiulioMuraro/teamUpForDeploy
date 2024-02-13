@@ -66,7 +66,7 @@ exports.fetchPrenotazione = async (req, res) => {
       
       }));
 
-      res.status(200).json({ success: true, findPrenotazioni });
+      res.status(200).json({ success: true, message: findPrenotazioni });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: "Errore durante il recupero delle prenotazioni: " + error });

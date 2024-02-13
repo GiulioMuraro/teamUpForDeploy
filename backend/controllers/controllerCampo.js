@@ -26,6 +26,9 @@ exports.inserisciCampo = async (req, res) => {
         gestore: findGest,
       });
 
+      findGest.campi.push(newCampo);
+
+      await findGest.save();
       await newCampo.save();
 
       res.status(200).json({ success: true, message: "Campo creato correttamente" });

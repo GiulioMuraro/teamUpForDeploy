@@ -11,6 +11,7 @@ const authRoute = require('./routes/autenticazione');
 const prenotazioniRouter = require('./routes/prenotazioni');
 const campiRouter = require('./routes/campi');
 const segnalazioniRouter = require('./routes/reports');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/auth", authRoute);
 app.use("/campi", campiRouter);
 app.use("/prenotazioni", prenotazioniRouter);
 app.use("/segnalazioni", segnalazioniRouter);
+app.use("/admin", adminRouter);
 
 // Gestisci le pagine che non esistono
 app.use('/*', (req, res) => {

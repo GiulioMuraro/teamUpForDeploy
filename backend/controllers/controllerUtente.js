@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const Utente = require('../models/utente');
+const Campo = require('../models/campo');
 const invioEmail = require('./email');
 const crypto = require('crypto');
 
@@ -69,7 +70,7 @@ exports.loginUtente = async (req, res) => {
       }
     );
 
-    res.status(200).json({ success: true, token: token, nome: utente.nome, email: utente.email });
+    res.status(200).json({ success: true, token: token, nome: utente.nome, email: utente.email, ruolo: utente.ruolo });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -196,8 +197,7 @@ exports.getUserInfo = async (req, res) => {
     res.status(200).json({ success: true, message: { nome: findUtente.nome, email: findUtente.email } });
 
   }catch(error){
-    console.log("Errore nella modifica delle informazioni dell'utente: " + error);
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error });
   }
 
 };

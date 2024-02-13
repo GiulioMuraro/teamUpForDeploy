@@ -39,6 +39,7 @@
 import { defineComponent } from 'vue'
 import { config } from '@/config';
 import store from '@/store/index';
+import router from '@/router';
 
 export default defineComponent({
     name: 'ReportForm',
@@ -104,7 +105,7 @@ export default defineComponent({
 
                 if(res.status === 200){
                     alert("SEGNALAZIONE EFFETTUATA");
-
+                    router.push('/dashboardView');
                 }
                 else{
                     this.error.status = true;

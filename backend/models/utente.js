@@ -30,7 +30,7 @@ const schemaUtente = new mongoose.Schema({
         type:[mongoose.Types.ObjectId],
         ref:'campo'
     },
-    reports:{
+    reports:{   // Reports filed from the users
         type: [mongoose.Types.ObjectId],
         ref: 'report'
     },

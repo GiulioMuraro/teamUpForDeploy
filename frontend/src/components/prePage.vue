@@ -60,7 +60,7 @@
 
         if (data.success) {
 
-          this.bookedPrenotazioni = data.findPrenotazione.map((element) => ({
+          this.bookedPrenotazioni = data.message.map((element) => ({
             campo: element.campo,
             data: element.data,
             orario: element.orario
