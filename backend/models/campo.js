@@ -33,6 +33,12 @@ const schemaCampo = new mongoose.Schema({
 schemaCampo.post('findOneAndDelete', async function (doc, next){
 
     try {
+        // Check if doc exists
+        if (!doc) {
+            // Document not found, proceed to next middleware
+            return next();
+        }
+
         // Delete the bookings related to this field
         const prenotazioniToDelete = doc.prenotazioni;
         for (const prenotazioneId of prenotazioniToDelete) {

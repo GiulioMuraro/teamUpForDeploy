@@ -74,10 +74,9 @@ export default defineComponent({
           const data= await res.json();
 
           if(data.success){
-            store.commit('setToken', {user: data.nome, email: data.email, token: data.token})
+            store.commit('setToken', {user: data.nome, email: data.email, token: data.token, ruolo: data.ruolo})
             
             // If the logged user is an admin, it will be redirected to the adminaccountView, else the user will be redirected to the dashboardView
-            console.log("Ruolo utente: " + data.ruolo);
             if(data.ruolo == 'Admin')
               router.push('/adminAccountView');
             else

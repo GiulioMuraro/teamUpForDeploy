@@ -25,7 +25,10 @@ export default {
       <OptionsButton v-if = "$route.path == '/dashboardView'" class="mr-5"/>
     </div>
     <div v-else class="bg-gray-800 h-20 flex justify-start items-center">
-      <router-link to = '/dashboardView'>
+      <router-link v-if="checkAdmin" to = '/adminAccountView'>
+        <img src="../images/logoEnlarged.webp" alt="Logo" class="h-12 w-auto ml-20">
+      </router-link>
+      <router-link v-else to = '/dashboardView'>
         <img src="../images/logoEnlarged.webp" alt="Logo" class="h-12 w-auto ml-20">
       </router-link>
       <h1 v-if="$route.path == '/loginView'" class="text-3xl text-white ml-3">LogIn</h1>
@@ -42,6 +45,7 @@ export default {
 <script>
 
 import OptionsButton from './OptionsButton.vue'
+import store from '@/store';
 
 export default {
   name: 'NavBar',
@@ -49,6 +53,12 @@ export default {
     OptionsButton
   },
   computed: {
+    checkAdmin(){
+      if(store.getters.getRuolo == 'Admin'){
+        return true;
+      }
+      else return false;
+    },
     showOptionsButton() {
       // Show the OptionsButton on routes that are not the loginView and SignUpview
       return this.$route.path !== '/loginView' && this.$route.path !== '/signUpView';

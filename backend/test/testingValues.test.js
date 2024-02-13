@@ -53,6 +53,12 @@ describe('Test prenotazioni', () => {
         });
         expect(campo.status).toBe(200);
 
+        // Retrieve the ObjectId of the field
+        const findCampo = await Campo.findOne({ nome: mockData.campo.nome });
+        if (!findCampo) {
+            return;
+        }
+
         const res = await request(app).post('/prenotazioni').set('Content-Type', 'application/json').send({
         nome: mockData.campo.nome,
         data: mockData.prenotazione.data,
@@ -61,5 +67,20 @@ describe('Test prenotazioni', () => {
         });
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ success: true, message: "Nuova prenotazione creata" });
+
+        // Retrieve the ObjectId of the booking
+        const findPrenotazione = await Prenotazione.findOne({ campo: findCampo, data: mockData.prenotazione.data, orario: mockData.prenotazione.orario, utente: findUtente });
+        if (!findPrenotazione) {
+            return;
+        }
+
+        const segnalazione = await request(app).post('/segnalazioni').set('Content-Type', 'application/json').send({
+            description: mockData.segnalazione.description,
+            utente: findUtente,
+            prenotazione: findPrenotazione,
+            campo: findCampo
+          });
+        expect(segnalazione.status).toBe(200);
+        expect(segnalazione.body).toEqual({ success: true, message: "Nuova segnalazione creata" });
     });
 });

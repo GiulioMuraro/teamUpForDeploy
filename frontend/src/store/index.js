@@ -6,7 +6,8 @@ const store = createStore({
     return {
       user: "",
       email: "",
-      token: ""
+      token: "",
+      ruolo: ""
     }
   },
   mutations: {
@@ -15,6 +16,7 @@ const store = createStore({
       state.user = payload.user;
       state.email = payload.email;
       state.token = payload.token;
+      state.ruolo = payload.ruolo;
 
       // Salva le informazioni di login in localStorage
       localStorage.setItem('loginInfo', JSON.stringify(payload));
@@ -24,6 +26,7 @@ const store = createStore({
       state.user = "";
       state.email = "";
       state.token = "";
+      state.ruolo = "";
 
       // Rimuovi le informazioni di login da localStorage
       localStorage.removeItem('loginInfo');
@@ -46,8 +49,8 @@ const store = createStore({
     initializeStore({ commit }) {
       const loginInfo = localStorage.getItem('loginInfo');
       if (loginInfo) {
-        const { user, email, token } = JSON.parse(loginInfo);
-        commit('setToken', { user, email, token });
+        const { user, email, token, ruolo } = JSON.parse(loginInfo);
+        commit('setToken', { user, email, token, ruolo });
       }
     },
     // Logout action to clear token and user information
@@ -68,6 +71,9 @@ const store = createStore({
     getEmail: state => {
       return state.email;
     },
+    getRuolo: state => {
+      return state.ruolo;
+    }
   }
 });
 

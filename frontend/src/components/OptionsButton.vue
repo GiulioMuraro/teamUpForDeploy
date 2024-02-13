@@ -11,7 +11,7 @@
             <div class="py-1 bg-green-500 rounded-xl text-center" role="none">
                 <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                 <a href="#/profileView" class="bg-white rounded-2xl text-black block px-4 py-2 text-sm mx-5 w-10/12 ml-auto mr-auto my-1" role="menuitem" tabindex="1" id="menu-item-0">Profile</a>
-                <a href="#/bookingView" class="bg-white rounded-2xl text-black block px-4 py-2 text-sm w-10/12 ml-auto mr-auto my-1" role="menuitem" tabindex="2" id="menu-item-1">Gestisci prenotazioni</a>
+                <a href="#/preffettuateView" class="bg-white rounded-2xl text-black block px-4 py-2 text-sm w-10/12 ml-auto mr-auto my-1" role="menuitem" tabindex="2" id="menu-item-1">Gestisci prenotazioni</a>
                 <a href="#/reportView" class="bg-white rounded-2xl text-black block px-4 py-2 text-sm w-10/12 ml-auto mr-auto my-1" role="menuitem" tabindex="3" id="menu-item-2">Segnala</a>
                 <button type="button" @click = "handleLogout" class="bg-white rounded-2xl text-black block px-4 py-2 text-center text-sm w-10/12 ml-auto mr-auto my-1" role="menuitem" tabindex="4" id="menu-item-3">Esci</button>
             </div>

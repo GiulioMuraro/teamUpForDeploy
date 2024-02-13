@@ -65,8 +65,8 @@ export default defineComponent({
                     body: JSON.stringify({ "utente": this.utente })
             });
                 const data = await res.json();
-                this.prenotazioniUtente = data.findPrenotazioni; // Imposta i dati dei campi disponibili nella proprietà dati del componente
-
+                this.prenotazioniUtente = data.message; // Imposta i dati dei campi disponibili nella proprietà dati del componente
+                console.log(this.prenotazioniUtente);
                 if(!data.success){
                     console.log("Errore nella ricezione delle prenotazioni: " + res.error);
                 }
