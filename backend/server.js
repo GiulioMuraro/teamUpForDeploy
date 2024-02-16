@@ -16,7 +16,7 @@ const adminRouter = require('./routes/admin');
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "https://teamupfrontend-pl6j.onrender.com"
 };
 
 app.use(cors(corsOptions));
