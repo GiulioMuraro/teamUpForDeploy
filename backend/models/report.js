@@ -38,10 +38,13 @@ reportSchema.post('deleteOne', async function (doc, next){
     try {
         // Access the captured document
         const docToDelete = this._docToDelete;
+        console.log("Salve: " + docToDelete);
 
-        console.log("PRE report");
-        // Delete the reference to this report from the user document
-        await mongoose.model('utente').updateOne({ _id: docToDelete.utente }, { $pull: { reports: docToDelete._id } });
+        // Check if the user is still existing
+        if(docToDelete.utente){
+            // Delete the reference to this report from the user document
+            await mongoose.model('utente').updateOne({ _id: docToDelete.utente }, { $pull: { reports: docToDelete._id } });
+        }
 
         // Delete the reference to this report from the field document
         await mongoose.model('campo').updateOne({ _id: docToDelete.campo }, { $pull: { reports: docToDelete._id } });

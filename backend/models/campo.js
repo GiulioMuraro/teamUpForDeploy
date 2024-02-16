@@ -56,13 +56,15 @@ schemaCampo.post('findOneAndDelete', async function (doc, next){
 
         // Delete the reports for this field
         const reportsToDelete = doc.reports;
-        for (const segnalazioneId of reportsToDelete) {
-            try {
-                // Find and delete the prenotazione document
-                const deletedSegnalazione = await mongoose.model('report').deleteOne({ _id: segnalazioneId});
-        
-            } catch (error) {
-                console.error(`Error deleting segnalazione with ID ${segnalazioneId}:`, error);
+        if(reportsToDelete.length > 0){
+            for (const segnalazioneId of reportsToDelete) {
+                try {
+                    // Find and delete the prenotazione document
+                    const deletedSegnalazione = await mongoose.model('report').deleteOne({ _id: segnalazioneId});
+            
+                } catch (error) {
+                    console.error(`Error deleting segnalazione with ID ${segnalazioneId}:`, error);
+                }
             }
         }
 
